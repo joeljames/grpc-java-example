@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package calculator;
+
+option java_package = "com.proto.calculator";
+option java_multiple_files = true;
+
+import 'calculator/sum.proto';
+import 'calculator/prime.proto';
+import 'calculator/avg.proto';
+import 'calculator/max.proto';
+import 'calculator/sqrt.proto';
+
+service CalculatorService {
+  //Unary
+  rpc sum(SumRequest) returns (SumResponse);
+
+  //Server Streaming
+  rpc primes(PrimeRequest) returns (stream PrimeResponse);
+
+  //Client Streaming
+  rpc avg(stream AvgRequest) returns (AvgResponse);
+
+  //Bi Directional Streaming
+  rpc max(stream MaxRequest) returns (stream MaxResponse);
+
+  //Returns a Status.INVALID_ARGUMENT if the SqrtRequest.number is negative
+  rpc sqrt(SqrtRequest) returns (SqrtResponse);
+}

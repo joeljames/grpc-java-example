@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'com.google.protobuf' version '0.8.19'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.21.7"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.49.2'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+group 'com.joel'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets.main.java.srcDir new File(buildDir, 'generated/source')
+
+dependencies {
+    runtimeOnly 'io.grpc:grpc-netty-shaded:1.49.2'
+    implementation 'io.grpc:grpc-protobuf:1.49.2'
+    implementation 'io.grpc:grpc-stub:1.49.2'
+
+    //gRPC Reflection
+    //gRPC Server Reflection provides information about publicly-accessible gRPC services on a serve
+    implementation "io.grpc:grpc-services:1.49.2"
+
+    //MongoDB driver
+    implementation 'org.mongodb:mongodb-driver-sync:4.5.0'
+
+
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
